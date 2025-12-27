@@ -1,0 +1,59 @@
+---
+title: 'Build Solana TX'
+api: 'POST https://api.sw4p.io/sdk/v1/solana/build-tx'
+description: 'Build a Solana transaction for signing'
+---
+
+Build a transaction for Solana → EVM transfers.
+
+## Request Body
+
+<ParamField body="to" type="string" required>
+  Destination chain: `ETH`, `BASE`, `ARB`, `POLYGON`
+</ParamField>
+
+<ParamField body="amount" type="string" required>
+  Amount in USDC
+</ParamField>
+
+<ParamField body="from_wallet" type="string" required>
+  Sender's Solana address
+</ParamField>
+
+<ParamField body="recipient" type="string" required>
+  Recipient's EVM address
+</ParamField>
+
+## Response
+
+<ResponseField name="intent_id" type="string">
+  Intent ID (use when submitting)
+</ResponseField>
+
+<ResponseField name="transaction" type="string">
+  Base64-encoded transaction
+</ResponseField>
+
+<RequestExample>
+```bash
+curl -X POST https://api.sw4p.io/sdk/v1/solana/build-tx \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sk_..." \
+  -d '{
+    "to": "BASE",
+    "amount": "100.00",
+    "from_wallet": "5abc...",
+    "recipient": "0x..."
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "intent_id": "int_xyz789",
+  "transaction": "AQAAAA...",
+  "expires_at": "2024-01-01T00:05:00Z"
+}
+```
+</ResponseExample>

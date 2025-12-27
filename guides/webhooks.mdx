@@ -1,0 +1,63 @@
+---
+title: 'Webhooks'
+description: 'Receive status updates via webhooks'
+---
+
+## Overview
+
+Configure webhooks to receive real-time status updates for your transfers.
+
+## Setup
+
+Pass a `webhookUrl` when creating a transfer:
+
+```typescript
+const result = await bridge.transfer({
+  from: 'BASE',
+  to: 'SOLANA',
+  amount: '100.00',
+  recipient: '5abc123...',
+  permit: signedPermit,
+  webhookUrl: 'https://your-server.com/webhook/sw4p'
+})
+```
+
+## Webhook Payload
+
+```json
+{
+  "intent_id": "int_abc123",
+  "status": "complete",
+  "source_chain": "BASE",
+  "destination_chain": "SOLANA",
+  "source_tx": "0x...",
+  "destination_tx": "5a...",
+  "amount": "100.00",
+  "timestamp": "2024-01-01T00:01:05Z"
+}
+```
+
+## Status Events
+
+| Status | Description |
+|--------|-------------|
+| `detected` | Burn confirmed on source |
+| `minted` | Mint executed on destination |
+| `complete` | Transfer complete |
+| `failed` | Transfer failed |
+
+## Verification
+
+Verify webhook signatures using the `X-Sw4p-Signature` header.
+
+```typescript
+import crypto from 'crypto'
+
+function verifyWebhook(payload: string, signature: string, secret: string) {
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(payload)
+    .digest('hex')
+  return signature === expected
+}
+```

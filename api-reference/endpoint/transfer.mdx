@@ -1,0 +1,72 @@
+---
+title: 'Transfer'
+api: 'POST https://api.sw4p.io/sdk/v1/transfer'
+description: 'Execute a cross-chain transfer'
+---
+
+Execute a gasless cross-chain USDC transfer.
+
+<Note>
+  For Solana source transfers, use `/sdk/v1/solana/build-tx` instead.
+</Note>
+
+## Request Body
+
+<ParamField body="from" type="string" required>
+  Source chain: `ETH`, `BASE`, `ARB`, `POLYGON`
+</ParamField>
+
+<ParamField body="to" type="string" required>
+  Destination chain: `ETH`, `BASE`, `ARB`, `POLYGON`, `SOLANA`
+</ParamField>
+
+<ParamField body="amount" type="string" required>
+  Amount in USDC (e.g., `"100.00"`)
+</ParamField>
+
+<ParamField body="recipient" type="string" required>
+  Recipient address
+</ParamField>
+
+<ParamField body="permit" type="object" required>
+  ERC-2612 permit signature
+</ParamField>
+
+## Response
+
+<ResponseField name="intent_id" type="string">
+  Transfer intent ID
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Initial status: `pending`
+</ResponseField>
+
+<ResponseField name="tx_hash" type="string">
+  Source transaction hash
+</ResponseField>
+
+<RequestExample>
+```bash
+curl -X POST https://api.sw4p.io/sdk/v1/transfer \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sk_..." \
+  -d '{
+    "from": "BASE",
+    "to": "SOLANA",
+    "amount": "100.00",
+    "recipient": "5abc...",
+    "permit": {...}
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "intent_id": "int_abc123",
+  "status": "pending",
+  "tx_hash": "0x..."
+}
+```
+</ResponseExample>

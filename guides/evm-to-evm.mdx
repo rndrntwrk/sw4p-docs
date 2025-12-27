@@ -1,0 +1,44 @@
+---
+title: 'EVM to EVM'
+description: 'Transfer USDC between EVM chains'
+---
+
+## Overview
+
+Transfer USDC between any EVM chains (Ethereum, Base, Arbitrum, Polygon).
+
+## Example Routes
+
+- Base → Ethereum
+- Ethereum → Polygon
+- Arbitrum → Base
+
+## Quick Example
+
+```typescript
+const result = await bridge.transfer({
+  from: 'BASE',
+  to: 'POLYGON',
+  amount: '100.00',
+  recipient: '0x...',
+  permit: signedPermit
+})
+```
+
+## Same-Chain Transfers
+
+For same-chain transfers (e.g., Base → Base):
+
+```typescript
+const result = await bridge.transfer({
+  from: 'BASE',
+  to: 'BASE',
+  amount: '100.00',
+  recipient: '0x...',
+  permit: signedPermit
+})
+```
+
+<Note>
+  Same-chain transfers are faster and have lower fees.
+</Note>

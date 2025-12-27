@@ -1,0 +1,97 @@
+---
+title: 'Rust SDK'
+description: 'Official Rust SDK for sw4p'
+---
+
+## Installation
+
+```toml Cargo.toml
+[dependencies]
+sw4p-bridge = "0.1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+```
+
+## Basic Usage
+
+```rust
+use sw4p_bridge::Sw4pBridge;
+
+let bridge = Sw4pBridge::new("sk_...");
+```
+
+## Core Methods
+
+### transfer()
+
+```rust
+let result = bridge.transfer(TransferParams {
+    from: Chain::Base,
+    to: Chain::Solana,
+    amount: "100.00".into(),
+    recipient: "5abc123...".into(),
+    permit: Some(permit),
+    ..Default::default()
+}).await?;
+```
+
+### estimate_fee()
+
+```rust
+let estimate = bridge.estimate_fee(
+    Chain::Base,
+    Chain::Solana,
+    "100.00"
+).await?;
+```
+
+### get_status()
+
+```rust
+let status = bridge.get_status("int_abc123").await?;
+
+match status.status {
+    TransferStatus::Complete => println!("Done!"),
+    TransferStatus::Failed => println!("Failed"),
+    _ => println!("In progress..."),
+}
+```
+
+## Solana Helpers
+
+### build_solana_transfer()
+
+```rust
+let tx_data = bridge.build_solana_transfer(SolanaBuildParams {
+    to: Chain::Base,
+    amount: "100.00".into(),
+    from_wallet: "5abc123...".into(),
+    recipient: "0x...".into(),
+    ..Default::default()
+}).await?;
+```
+
+## Error Handling
+
+```rust
+use sw4p_bridge::Error;
+
+match bridge.transfer(params).await {
+    Ok(result) => println!("Success: {}", result.intent_id),
+    Err(Error::Auth(msg)) => eprintln!("Auth failed: {}", msg),
+    Err(Error::RateLimit { retry_after_ms }) => {
+        println!("Rate limited, retry in {}ms", retry_after_ms);
+    }
+    Err(e) => eprintln!("Error: {}", e),
+}
+```
+
+## Links
+
+<CardGroup cols={2}>
+  <Card title="crates.io" icon="rust" href="https://crates.io/crates/sw4p-bridge">
+    View on crates.io
+  </Card>
+  <Card title="GitHub" icon="github" href="https://github.com/Render-Network-OS/sw4p-rs-sdk">
+    View source
+  </Card>
+</CardGroup>

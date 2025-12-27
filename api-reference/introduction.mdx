@@ -1,33 +1,56 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Overview'
+sidebarTitle: 'Introduction'
+description: 'REST API for sw4p transfers'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Base URL
 
-## Welcome
-
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```
+https://api.sw4p.io
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All requests require an API key:
+
+```bash
+curl https://api.sw4p.io/sdk/v1/pairs \
+  -H "X-API-Key: sk_your_api_key"
+```
+
+## Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/sdk/v1/transfer` | Execute transfer |
+| POST | `/sdk/v1/estimate` | Estimate fees |
+| GET | `/sdk/v1/status/:id` | Get status |
+| GET | `/sdk/v1/pairs` | Get routes |
+| GET | `/sdk/v1/limits` | Get limits |
+| POST | `/sdk/v1/solana/build-tx` | Build Solana tx |
+| POST | `/sdk/v1/solana/submit` | Submit Solana tx |
+
+## Error Responses
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "error": "ERROR_CODE",
+  "message": "Human readable message"
+}
 ```
+
+| Status | Code | Description |
+|--------|------|-------------|
+| 400 | `INVALID_REQUEST` | Bad request |
+| 401 | `UNAUTHORIZED` | Invalid API key |
+| 404 | `NOT_FOUND` | Not found |
+| 429 | `RATE_LIMITED` | Too many requests |
+
+## Rate Limits
+
+| Tier | Requests/min |
+|------|--------------|
+| Free | 60 |
+| Pro | 300 |
+| Enterprise | Unlimited |

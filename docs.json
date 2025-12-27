@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "sw4p",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#0078D7",
+    "light": "#1E90FF",
+    "dark": "#0063B1"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -14,55 +14,66 @@
         "tab": "Guides",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
               "index",
               "quickstart",
-              "development"
+              "supported-chains"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Transfer Guides",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "guides/evm-to-solana",
+              "guides/solana-to-evm",
+              "guides/evm-to-evm"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "SDKs",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "sdks/typescript",
+              "sdks/rust"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Advanced",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "guides/error-handling",
+              "guides/webhooks"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Overview",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Transfers",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/endpoint/transfer",
+              "api-reference/endpoint/estimate",
+              "api-reference/endpoint/status"
+            ]
+          },
+          {
+            "group": "Routes",
+            "pages": [
+              "api-reference/endpoint/pairs",
+              "api-reference/endpoint/limits"
+            ]
+          },
+          {
+            "group": "Solana",
+            "pages": [
+              "api-reference/endpoint/solana-build",
+              "api-reference/endpoint/solana-submit"
             ]
           }
         ]
@@ -71,52 +82,48 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "npm",
+          "href": "https://www.npmjs.com/package/@sw4p/bridge",
+          "icon": "npm"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "crates.io",
+          "href": "https://crates.io/crates/sw4p-bridge",
+          "icon": "rust"
         }
       ]
     }
   },
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "href": "https://sw4p.io"
   },
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "GitHub",
+        "href": "https://github.com/Render-Network-OS"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://app.sw4p.io"
     }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/sw4pio",
+      "github": "https://github.com/Render-Network-OS"
     }
+  },
+  "api": {
+    "baseUrl": "https://api.sw4p.io"
+  },
+  "metadata": {
+    "og:image": "/images/og-image.png",
+    "og:title": "sw4p - Gasless Cross-Chain Transfers",
+    "og:description": "Transfer stablecoins and native tokens across any blockchain"
   }
 }

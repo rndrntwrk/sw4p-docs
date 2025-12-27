@@ -1,0 +1,32 @@
+---
+title: 'Pairs'
+api: 'GET https://api.sw4p.io/sdk/v1/pairs'
+description: 'Get supported route pairs'
+---
+
+Get all supported transfer routes.
+
+## Response
+
+<ResponseField name="pairs" type="array">
+  Array of route pairs with `from`, `to`, and `enabled` fields
+</ResponseField>
+
+<RequestExample>
+```bash
+curl https://api.sw4p.io/sdk/v1/pairs \
+  -H "X-API-Key: sk_..."
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "pairs": [
+    { "from": "BASE", "to": "SOLANA", "enabled": true },
+    { "from": "BASE", "to": "ETH", "enabled": true },
+    { "from": "SOLANA", "to": "BASE", "enabled": true }
+  ]
+}
+```
+</ResponseExample>

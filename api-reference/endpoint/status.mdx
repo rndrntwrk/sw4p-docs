@@ -1,0 +1,51 @@
+---
+title: 'Status'
+api: 'GET https://api.sw4p.io/sdk/v1/status/{intent_id}'
+description: 'Get transfer status'
+---
+
+Get the current status of a transfer.
+
+## Path Parameters
+
+<ParamField path="intent_id" type="string" required>
+  The intent ID from the transfer response
+</ParamField>
+
+## Response
+
+<ResponseField name="intent_id" type="string">
+  Transfer intent ID
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Status: `pending`, `detected`, `minted`, `complete`, `failed`
+</ResponseField>
+
+<ResponseField name="source_tx" type="string">
+  Source chain transaction hash
+</ResponseField>
+
+<ResponseField name="destination_tx" type="string">
+  Destination chain transaction hash
+</ResponseField>
+
+<RequestExample>
+```bash
+curl https://api.sw4p.io/sdk/v1/status/int_abc123 \
+  -H "X-API-Key: sk_..."
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "intent_id": "int_abc123",
+  "status": "complete",
+  "source_chain": "BASE",
+  "destination_chain": "SOLANA",
+  "source_tx": "0x...",
+  "destination_tx": "5a..."
+}
+```
+</ResponseExample>

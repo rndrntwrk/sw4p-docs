@@ -1,0 +1,74 @@
+---
+title: 'Supported Chains'
+description: 'Available routes and tokens'
+---
+
+## Overview
+
+sw4p is designed to support **every blockchain**. Current MVP includes:
+
+## EVM Chains
+
+| Chain | Code | Chain ID | Status |
+|-------|------|----------|--------|
+| Ethereum | `ETH` | 1 | ✅ Live |
+| Base | `BASE` | 8453 | ✅ Live |
+| Arbitrum | `ARB` | 42161 | ✅ Live |
+| Polygon | `POLYGON` | 137 | ✅ Live |
+
+## Non-EVM Chains
+
+| Chain | Code | Status |
+|-------|------|--------|
+| Solana | `SOLANA` | ✅ Live |
+
+## Supported Tokens
+
+| Token | Networks |
+|-------|----------|
+| USDC | All supported chains |
+
+<Note>
+  More tokens coming soon! Our infrastructure supports any stablecoin and native token.
+</Note>
+
+## Route Availability
+
+All chains can transfer to all other chains:
+
+```
+ETH ↔ BASE ↔ ARB ↔ POLYGON ↔ SOLANA
+```
+
+### Check Route Programmatically
+
+```typescript
+const bridge = new Sw4pBridge({ apiKey: 'sk_...' })
+
+// Check specific route
+const supported = await bridge.supportsRoute('BASE', 'SOLANA')
+
+// Get all pairs
+const pairs = await bridge.getSupportedPairs()
+```
+
+## Transfer Limits
+
+| Limit | Amount |
+|-------|--------|
+| Minimum | $1.00 USDC |
+| Maximum | $100,000 USDC |
+
+## Coming Soon
+
+<CardGroup cols={3}>
+  <Card title="More EVM Chains" icon="ethereum">
+    Optimism, Avalanche, BSC
+  </Card>
+  <Card title="More Tokens" icon="coins">
+    USDT, DAI, Native tokens
+  </Card>
+  <Card title="More Non-EVM" icon="globe">
+    Sui, Aptos, Cosmos
+  </Card>
+</CardGroup>

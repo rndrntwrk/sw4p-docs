@@ -1,0 +1,53 @@
+---
+title: 'Submit Solana TX'
+api: 'POST https://api.sw4p.io/sdk/v1/solana/submit'
+description: 'Submit a signed Solana transaction'
+---
+
+Submit a signed Solana transaction.
+
+## Request Body
+
+<ParamField body="intent_id" type="string" required>
+  Intent ID from build-tx
+</ParamField>
+
+<ParamField body="signed_transaction" type="string" required>
+  Base64-encoded signed transaction
+</ParamField>
+
+## Response
+
+<ResponseField name="intent_id" type="string">
+  Transfer intent ID
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Initial status: `pending`
+</ResponseField>
+
+<ResponseField name="tx_signature" type="string">
+  Solana transaction signature
+</ResponseField>
+
+<RequestExample>
+```bash
+curl -X POST https://api.sw4p.io/sdk/v1/solana/submit \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sk_..." \
+  -d '{
+    "intent_id": "int_xyz789",
+    "signed_transaction": "AQAAAA..."
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "intent_id": "int_xyz789",
+  "status": "pending",
+  "tx_signature": "5abc..."
+}
+```
+</ResponseExample>

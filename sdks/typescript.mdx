@@ -1,0 +1,132 @@
+---
+title: 'TypeScript SDK'
+description: 'Official TypeScript SDK for sw4p'
+---
+
+## Installation
+
+<CodeGroup>
+```bash npm
+npm install @sw4p/bridge
+```
+
+```bash pnpm
+pnpm add @sw4p/bridge
+```
+</CodeGroup>
+
+## Basic Usage
+
+```typescript
+import { Sw4pBridge } from '@sw4p/bridge'
+
+const bridge = new Sw4pBridge({ 
+  apiKey: 'sk_...',
+  debug: true
+})
+```
+
+## Core Methods
+
+### transfer()
+
+Execute a cross-chain transfer.
+
+```typescript
+const result = await bridge.transfer({
+  from: 'BASE',
+  to: 'SOLANA',
+  amount: '100.00',
+  recipient: '5abc123...',
+  permit: signedPermit
+})
+```
+
+### estimateFee()
+
+Get fee estimate before transfer.
+
+```typescript
+const estimate = await bridge.estimateFee({
+  from: 'BASE',
+  to: 'SOLANA',
+  amount: '100.00'
+})
+```
+
+### getStatus()
+
+Check transfer status.
+
+```typescript
+const status = await bridge.getStatus('int_abc123')
+```
+
+## Solana Helpers
+
+### createSolanaTransfer()
+
+Build a Solana transaction for signing.
+
+```typescript
+const { transaction, intentId } = await bridge.createSolanaTransfer({
+  to: 'BASE',
+  amount: '100.00',
+  fromWallet: publicKey.toBase58(),
+  recipient: '0x...'
+})
+```
+
+### submitSolanaTransfer()
+
+Submit the signed transaction.
+
+```typescript
+const result = await bridge.submitSolanaTransfer({
+  intentId,
+  signedTransaction: Buffer.from(signed.serialize()).toString('base64')
+})
+```
+
+## EVM Helpers
+
+### createPermitTypedData()
+
+Generate EIP-712 typed data for permit signing.
+
+```typescript
+const permitData = bridge.createPermitTypedData({
+  chain: 'BASE',
+  owner: '0x...',
+  spender: '0x...',
+  value: parseUnits('100', 6),
+  nonce: 0n
+})
+```
+
+## Error Handling
+
+```typescript
+import { ApiError, AuthError, RateLimitError } from '@sw4p/bridge'
+
+try {
+  await bridge.transfer(params)
+} catch (error) {
+  if (error instanceof AuthError) {
+    console.log('Invalid API key')
+  } else if (error instanceof RateLimitError) {
+    console.log(`Retry in ${error.retryAfterMs}ms`)
+  }
+}
+```
+
+## Links
+
+<CardGroup cols={2}>
+  <Card title="npm" icon="npm" href="https://www.npmjs.com/package/@sw4p/bridge">
+    View on npm
+  </Card>
+  <Card title="GitHub" icon="github" href="https://github.com/Render-Network-OS/sw4p-ts-sdk">
+    View source
+  </Card>
+</CardGroup>

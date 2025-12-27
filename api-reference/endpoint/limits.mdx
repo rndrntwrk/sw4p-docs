@@ -1,0 +1,33 @@
+---
+title: 'Limits'
+api: 'GET https://api.sw4p.io/sdk/v1/limits'
+description: 'Get transfer limits'
+---
+
+Get minimum and maximum transfer amounts.
+
+## Response
+
+<ResponseField name="min_amount" type="string">
+  Minimum transfer amount
+</ResponseField>
+
+<ResponseField name="max_amount" type="string">
+  Maximum transfer amount
+</ResponseField>
+
+<RequestExample>
+```bash
+curl https://api.sw4p.io/sdk/v1/limits \
+  -H "X-API-Key: sk_..."
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "min_amount": "1.00",
+  "max_amount": "100000.00"
+}
+```
+</ResponseExample>

@@ -1,0 +1,52 @@
+---
+title: 'Error Handling'
+description: 'Handle errors gracefully'
+---
+
+## Error Types
+
+```typescript
+import { ApiError, AuthError, RateLimitError, NetworkError } from '@sw4p/bridge'
+```
+
+| Error | Description | Retryable |
+|-------|-------------|-----------|
+| `AuthError` | Invalid API key | No |
+| `RateLimitError` | Too many requests | Yes |
+| `ApiError` | General API error | Depends |
+| `NetworkError` | Connection failed | Yes |
+
+## Handling Examples
+
+```typescript
+try {
+  const result = await bridge.transfer(params)
+} catch (error) {
+  if (error instanceof AuthError) {
+    console.error('Invalid API key')
+  }
+  
+  if (error instanceof RateLimitError) {
+    await sleep(error.retryAfterMs)
+    return retry()
+  }
+  
+  if (error instanceof ApiError) {
+    console.error(`API error: ${error.message}`)
+  }
+}
+```
+
+## Retry Strategy
+
+The SDK includes automatic retry with exponential backoff:
+
+```typescript
+const bridge = new Sw4pBridge({
+  apiKey: 'sk_...',
+  retry: {
+    maxAttempts: 3,
+    backoffMs: 1000
+  }
+})
+```

@@ -1,0 +1,62 @@
+---
+title: 'Estimate'
+api: 'POST https://api.sw4p.io/sdk/v1/estimate'
+description: 'Get fee estimate for a transfer'
+---
+
+Get a fee estimate before executing a transfer.
+
+## Request Body
+
+<ParamField body="from" type="string" required>
+  Source chain
+</ParamField>
+
+<ParamField body="to" type="string" required>
+  Destination chain
+</ParamField>
+
+<ParamField body="amount" type="string" required>
+  Amount in USDC
+</ParamField>
+
+## Response
+
+<ResponseField name="amount" type="string">
+  Original amount
+</ResponseField>
+
+<ResponseField name="fee" type="object">
+  Fee breakdown (total, platform, gas)
+</ResponseField>
+
+<ResponseField name="net_receive" type="string">
+  Amount recipient receives
+</ResponseField>
+
+<RequestExample>
+```bash
+curl -X POST https://api.sw4p.io/sdk/v1/estimate \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: sk_..." \
+  -d '{
+    "from": "BASE",
+    "to": "SOLANA",
+    "amount": "100.00"
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "amount": "100.00",
+  "fee": {
+    "total": "2.50",
+    "platform": "1.00",
+    "gas": "1.50"
+  },
+  "net_receive": "97.50"
+}
+```
+</ResponseExample>

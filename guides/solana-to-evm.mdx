@@ -1,0 +1,51 @@
+---
+title: 'Solana to EVM'
+description: 'Transfer USDC from Solana to any EVM chain'
+---
+
+## Overview
+
+Transfer USDC from Solana to Ethereum, Base, Arbitrum, or Polygon.
+
+<Note>
+  Solana transfers require a two-step flow: build, sign, submit.
+</Note>
+
+## Step-by-Step
+
+<Steps>
+  <Step title="Build Transaction">
+    ```typescript
+    const { transaction, intentId } = await bridge.createSolanaTransfer({
+      to: 'BASE',
+      amount: '100.00',
+      fromWallet: publicKey.toBase58(),
+      recipient: '0x...'
+    })
+    ```
+  </Step>
+
+  <Step title="Sign with Wallet">
+    ```typescript
+    import { Transaction } from '@solana/web3.js'
+    
+    const tx = Transaction.from(Buffer.from(transaction, 'base64'))
+    const signed = await signTransaction(tx)
+    ```
+  </Step>
+
+  <Step title="Submit">
+    ```typescript
+    const result = await bridge.submitSolanaTransfer({
+      intentId,
+      signedTransaction: Buffer.from(signed.serialize()).toString('base64')
+    })
+    ```
+  </Step>
+
+  <Step title="Track Status">
+    ```typescript
+    const status = await bridge.getStatus(result.intentId)
+    ```
+  </Step>
+</Steps>
