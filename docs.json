@@ -124,6 +124,9 @@
   "metadata": {
     "og:image": "/images/og-image.png",
     "og:title": "sw4p - Gasless Cross-Chain Transfers",
-    "og:description": "Transfer stablecoins and native tokens across any blockchain"
+    "og:description": "Transfer stablecoins and native tokens across any blockchain",
+    "twitter:card": "summary_large_image",
+    "twitter:site": "@sw4p_io",
+    "twitter:image": "/images/og-image.png"
   }
 }
