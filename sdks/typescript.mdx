@@ -7,20 +7,20 @@ description: 'Official TypeScript SDK for sw4p'
 
 <CodeGroup>
 ```bash npm
-npm install @sw4p/bridge
+npm install @sw4p/sdk
 ```
 
 ```bash pnpm
-pnpm add @sw4p/bridge
+pnpm add @sw4p/sdk
 ```
 </CodeGroup>
 
 ## Basic Usage
 
 ```typescript
-import { Sw4pBridge } from '@sw4p/bridge'
+import { Sw4p } from '@sw4p/sdk'
 
-const bridge = new Sw4pBridge({ 
+const bridge = new Sw4p({ 
   apiKey: 'sk_...',
   debug: true
 })
@@ -107,7 +107,7 @@ const permitData = bridge.createPermitTypedData({
 ## Error Handling
 
 ```typescript
-import { ApiError, AuthError, RateLimitError } from '@sw4p/bridge'
+import { ApiError, AuthError, RateLimitError } from '@sw4p/sdk'
 
 try {
   await bridge.transfer(params)
@@ -123,7 +123,7 @@ try {
 ## Links
 
 <CardGroup cols={2}>
-  <Card title="npm" icon="npm" href="https://www.npmjs.com/package/@sw4p/bridge">
+  <Card title="npm" icon="npm" href="https://www.npmjs.com/package/@sw4p/sdk">
     View on npm
   </Card>
   <Card title="GitHub" icon="github" href="https://github.com/Render-Network-OS/sw4p-ts-sdk">

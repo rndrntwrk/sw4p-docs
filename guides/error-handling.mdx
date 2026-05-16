@@ -6,7 +6,7 @@ description: 'Handle errors gracefully'
 ## Error Types
 
 ```typescript
-import { ApiError, AuthError, RateLimitError, NetworkError } from '@sw4p/bridge'
+import { ApiError, AuthError, RateLimitError, NetworkError } from '@sw4p/sdk'
 ```
 
 | Error | Description | Retryable |
@@ -42,7 +42,7 @@ try {
 The SDK includes automatic retry with exponential backoff:
 
 ```typescript
-const bridge = new Sw4pBridge({
+const bridge = new Sw4p({
   apiKey: 'sk_...',
   retry: {
     maxAttempts: 3,

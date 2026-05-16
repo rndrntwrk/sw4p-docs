@@ -7,16 +7,16 @@ description: 'Make your first cross-chain transfer in 5 minutes'
 
 <CodeGroup>
 ```bash npm
-npm install @sw4p/bridge
+npm install @sw4p/sdk
 ```
 
 ```bash pnpm
-pnpm add @sw4p/bridge
+pnpm add @sw4p/sdk
 ```
 
 ```toml Rust
 [dependencies]
-sw4p-bridge = "0.1"
+sw4p-sdk = "0.1"
 ```
 </CodeGroup>
 
@@ -45,9 +45,9 @@ sw4p-bridge = "0.1"
 
 <CodeGroup>
 ```typescript TypeScript
-import { Sw4pBridge } from '@sw4p/bridge'
+import { Sw4p } from '@sw4p/sdk'
 
-const bridge = new Sw4pBridge({ apiKey: 'sk_...' })
+const bridge = new Sw4p({ apiKey: 'sk_...' })
 
 // 1. Estimate fees
 const estimate = await bridge.estimateFee({
@@ -74,11 +74,11 @@ console.log(`Status: ${status.status}`)
 ```
 
 ```rust Rust
-use sw4p_bridge::{Sw4pBridge, Chain};
+use sw4p_bridge::{Sw4p, Chain};
 
 #[tokio::main]
 async fn main() -> Result<(), sw4p_bridge::Error> {
-    let bridge = Sw4pBridge::new("sk_...");
+    let bridge = Sw4p::new("sk_...");
 
     // 1. Estimate fees
     let estimate = bridge.estimate_fee(
