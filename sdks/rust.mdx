@@ -7,16 +7,16 @@ description: 'Official Rust SDK for sw4p'
 
 ```toml Cargo.toml
 [dependencies]
-sw4p-bridge = "0.1"
+sw4p-sdk = "0.1"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 ```
 
 ## Basic Usage
 
 ```rust
-use sw4p_bridge::Sw4pBridge;
+use sw4p_bridge::Sw4p;
 
-let bridge = Sw4pBridge::new("sk_...");
+let bridge = Sw4p::new("sk_...");
 ```
 
 ## Core Methods
@@ -88,7 +88,7 @@ match bridge.transfer(params).await {
 ## Links
 
 <CardGroup cols={2}>
-  <Card title="crates.io" icon="rust" href="https://crates.io/crates/sw4p-bridge">
+  <Card title="crates.io" icon="rust" href="https://crates.io/crates/sw4p-sdk">
     View on crates.io
   </Card>
   <Card title="GitHub" icon="github" href="https://github.com/Render-Network-OS/sw4p-rs-sdk">
