@@ -17,7 +17,7 @@ jobs:
       - name: Check out disposable branch
         uses: actions/checkout@v4
 
-      - name: Download the twelve public clue images
+      - name: Download the twelve public clue images and official BIP39 wordlist
         shell: bash
         run: |
           set -euxo pipefail
@@ -34,7 +34,9 @@ jobs:
           curl -L --fail --retry 4 'https://pbs.twimg.com/media/HPSsyANXMAA553S.jpg?format=jpg&name=orig' -o hunting-time-media/clue-10.jpg
           curl -L --fail --retry 4 'https://pbs.twimg.com/media/HPeSOYwXwAAk2Wk.jpg?format=jpg&name=orig' -o hunting-time-media/clue-11.jpg
           curl -L --fail --retry 4 'https://pbs.twimg.com/media/HPlSoVUWgAAr50E.jpg?format=jpg&name=orig' -o hunting-time-media/clue-12.jpg
-          sha256sum hunting-time-media/*.jpg | tee hunting-time-media/SHA256SUMS.txt
+          curl -L --fail --retry 4 'https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt' -o hunting-time-media/bip39-english.txt
+          test "$(wc -l < hunting-time-media/bip39-english.txt)" -eq 2048
+          sha256sum hunting-time-media/* | tee hunting-time-media/SHA256SUMS.txt
 
       - name: Create a labelled contact sheet
         shell: bash
@@ -67,7 +69,7 @@ jobs:
       - name: Upload one-day research artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hunting-time-public-clue-media
+          name: hunting-time-public-clue-media-and-wordlist
           path: hunting-time-media
           retention-days: 1
           if-no-files-found: error
