@@ -1,47 +1,33 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "sw4p",
+  "name": "SW4P",
   "colors": {
-    "primary": "#0078D7",
-    "light": "#1E90FF",
+    "primary": "#2B8CFF",
+    "light": "#61D6D1",
     "dark": "#0063B1"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Integrate",
         "groups": [
           {
-            "group": "Getting Started",
-            "pages": [
-              "index",
-              "quickstart",
-              "supported-chains"
-            ]
+            "group": "Start",
+            "pages": ["index", "quickstart", "supported-chains"]
           },
           {
-            "group": "Transfer Guides",
-            "pages": [
-              "guides/evm-to-solana",
-              "guides/solana-to-evm",
-              "guides/evm-to-evm"
-            ]
+            "group": "Settlement workflows",
+            "pages": ["guides/evm-to-solana", "guides/solana-to-evm", "guides/evm-to-evm"]
           },
           {
             "group": "SDKs",
-            "pages": [
-              "sdks/typescript",
-              "sdks/rust"
-            ]
+            "pages": ["sdks/typescript", "sdks/rust"]
           },
           {
-            "group": "Advanced",
-            "pages": [
-              "guides/error-handling",
-              "guides/webhooks"
-            ]
+            "group": "Reliability",
+            "pages": ["guides/error-handling", "guides/webhooks"]
           }
         ]
       },
@@ -50,47 +36,32 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": [
-              "api-reference/introduction"
-            ]
+            "pages": ["api-reference/introduction"]
           },
           {
-            "group": "Transfers",
+            "group": "Settlement lifecycle",
             "pages": [
-              "api-reference/endpoint/transfer",
               "api-reference/endpoint/estimate",
+              "api-reference/endpoint/transfer",
               "api-reference/endpoint/status"
             ]
           },
           {
-            "group": "Routes",
-            "pages": [
-              "api-reference/endpoint/pairs",
-              "api-reference/endpoint/limits"
-            ]
+            "group": "Route discovery",
+            "pages": ["api-reference/endpoint/pairs", "api-reference/endpoint/limits"]
           },
           {
-            "group": "Solana",
-            "pages": [
-              "api-reference/endpoint/solana-build",
-              "api-reference/endpoint/solana-submit"
-            ]
+            "group": "Solana instruction flow",
+            "pages": ["api-reference/endpoint/solana-build", "api-reference/endpoint/solana-submit"]
           }
         ]
       }
     ],
     "global": {
       "anchors": [
-        {
-          "anchor": "npm",
-          "href": "https://www.npmjs.com/package/@sw4p/bridge",
-          "icon": "npm"
-        },
-        {
-          "anchor": "crates.io",
-          "href": "https://crates.io/crates/sw4p-bridge",
-          "icon": "rust"
-        }
+        { "anchor": "SW4P", "href": "https://sw4p.io", "icon": "arrows-rotate" },
+        { "anchor": "RNDRNTWRK", "href": "https://www.rndrntwrk.com/", "icon": "network-wired" },
+        { "anchor": "Design partners", "href": "https://www.rndrntwrk.com/partners", "icon": "handshake" }
       ]
     }
   },
@@ -101,21 +72,19 @@
   },
   "navbar": {
     "links": [
-      {
-        "label": "GitHub",
-        "href": "https://github.com/Render-Network-OS"
-      }
+      { "label": "GitHub", "href": "https://github.com/rndrntwrk" },
+      { "label": "RNDRNTWRK Docs", "href": "https://docs.rndrntwrk.com/sw4p" }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.sw4p.io"
+      "label": "Propose an integration",
+      "href": "https://www.rndrntwrk.com/partners"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/sw4pio",
-      "github": "https://github.com/Render-Network-OS"
+      "x": "https://x.com/RNDRNTWRK",
+      "github": "https://github.com/rndrntwrk"
     }
   },
   "api": {
@@ -123,10 +92,10 @@
   },
   "metadata": {
     "og:image": "/images/og-image.png",
-    "og:title": "sw4p - Gasless Cross-Chain Transfers",
-    "og:description": "Transfer stablecoins and native tokens across any blockchain",
+    "og:title": "SW4P — Programmable Stablecoin Settlement",
+    "og:description": "Quote, execute, prove, recover, and reconcile settlement across supported routes.",
     "twitter:card": "summary_large_image",
-    "twitter:site": "@sw4p_io",
+    "twitter:site": "@RNDRNTWRK",
     "twitter:image": "/images/og-image.png"
   }
 }
