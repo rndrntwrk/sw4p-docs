@@ -67,25 +67,30 @@ The generated route table should expose:
 
 ## Programmatic discovery
 
-Applications should discover supported routes from the current API or SDK rather than copying a documentation table into product code.
+Applications should discover supported routes from the current generated API or SDK rather than copying a documentation table into product code.
 
-```typescript
-const sw4p = new Sw4p({ apiKey: process.env.SW4P_API_KEY })
+The following is a **conceptual contract**, not a promise of the current endpoint path or SDK property names:
 
-const routes = await sw4p.getSupportedPairs()
-const route = routes.find(
-  (candidate) =>
-    candidate.source === 'BASE' &&
-    candidate.destination === 'SOLANA' &&
-    candidate.asset === 'USDC'
-)
-
-if (!route || route.productionProofState !== 'ADMITTED') {
-  throw new Error('Requested route is not currently admitted')
+```json
+{
+  "route_id": "route-specific-identifier",
+  "source": { "rail": "BASE", "asset": "USDC" },
+  "destination": { "rail": "SOLANA", "asset": "USDC" },
+  "environment": "production",
+  "source_state": "PRESENT",
+  "qualification_state": "QUALIFIED",
+  "deployment_state": "DEPLOYED",
+  "economic_activation_state": "ENABLED",
+  "production_proof_state": "ADMITTED",
+  "limits": { "minimum": "registry-value", "maximum": "registry-value" },
+  "fee_policy_version": "signed-policy-version",
+  "last_proof": "evidence-reference"
 }
 ```
 
-The exact SDK response types remain owned by the generated API reference.
+<Info>
+The generated API reference owns the actual endpoint, field names, enum values, and SDK types. Integrators should compile against that reference rather than this illustrative shape.
+</Info>
 
 ## Limits
 
