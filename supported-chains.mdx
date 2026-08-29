@@ -1,74 +1,121 @@
 ---
-title: 'Supported Chains'
-description: 'Available routes and tokens'
+title: "Supported Routes"
+description: "How SW4P publishes route, asset, environment, limit, fee, recovery, and proof state."
 ---
 
-## Overview
+# Route availability is generated, not narrated
 
-sw4p is designed to support **every blockchain**. Current MVP includes:
+SW4P does not publish one evergreen list of “supported chains.”
 
-## EVM Chains
+A route is a specific economic and technical corridor involving:
 
-| Chain | Code | Chain ID | Status |
-|-------|------|----------|--------|
-| Ethereum | `ETH` | 1 | ✅ Live |
-| Base | `BASE` | 8453 | ✅ Live |
-| Arbitrum | `ARB` | 42161 | ✅ Live |
-| Polygon | `POLYGON` | 137 | ✅ Live |
+- source rail and asset;
+- destination rail and asset;
+- environment;
+- executor or adapter;
+- authorization model;
+- fee and gas policy;
+- limits and capacity;
+- liquidity or inventory dependency;
+- finality and proof;
+- recovery and refund rules.
 
-## Non-EVM Chains
+Two chains may both be integrated while a particular route between them remains disabled.
 
-| Chain | Code | Status |
-|-------|------|--------|
-| Solana | `SOLANA` | ✅ Live |
+## Route-state dimensions
 
-## Supported Tokens
+| Dimension | Question |
+|---|---|
+| **Source state** | Does the executor, programme, adapter, or specification exist? |
+| **Qualification state** | Has the route passed its required simulation, authorization, invariant, and workload checks? |
+| **Deployment state** | Are the correct contracts, programmes, roles, and bindings deployed in this environment? |
+| **Economic-activation state** | Are gas, fees, liquidity, inventory, and operating policy funded and enabled? |
+| **Production-proof state** | Does a current accepted settlement and reconciliation record exist? |
 
-| Token | Networks |
-|-------|----------|
-| USDC | All supported chains |
-
-<Note>
-  More tokens coming soon! Our infrastructure supports any stablecoin and native token.
-</Note>
-
-## Route Availability
-
-All chains can transfer to all other chains:
-
+```mermaid
+flowchart LR
+    S[Source present] --> Q[Qualified]
+    Q --> D[Deployed]
+    D --> A[Economically active]
+    A --> P[Production-proven]
 ```
-ETH ↔ BASE ↔ ARB ↔ POLYGON ↔ SOLANA
-```
 
-### Check Route Programmatically
+<Warning>
+A route may not skip from `SOURCE_PRESENT` to a public `LIVE` label. Route admission is route-local, asset-local, environment-local, and versioned.
+</Warning>
+
+## Public route registry fields
+
+The generated route table should expose:
+
+| Field | Example meaning |
+|---|---|
+| Route ID | Stable machine identifier for the exact corridor |
+| Source | Chain, network, asset, and token contract or mint |
+| Destination | Chain, network, asset, and token contract or mint |
+| Route kind | CCTP, NTT, same-chain, partner adapter, or another admitted rail |
+| Environment | Testnet, staging, limited production, or production |
+| State | Separate source, qualification, deployment, activation, and proof values |
+| Minimum and maximum | Current transaction bounds |
+| Capacity | Available route or inventory capacity where applicable |
+| Fee policy | Protocol, provider, forwarding, and minimum-fee treatment |
+| Gas policy | Sponsored, recovered, quoted separately, or user-paid |
+| Finality | Required route-local finality state |
+| Recovery | Timeout, retry, refund, or operator escalation path |
+| Last proof | Date, transaction, evidence packet, and reconciliation reference |
+| Policy version | The signed route and economic policy currently in force |
+
+## Programmatic discovery
+
+Applications should discover supported routes from the current API or SDK rather than copying a documentation table into product code.
 
 ```typescript
-const bridge = new Sw4p({ apiKey: 'sk_...' })
+const sw4p = new Sw4p({ apiKey: process.env.SW4P_API_KEY })
 
-// Check specific route
-const supported = await bridge.supportsRoute('BASE', 'SOLANA')
+const routes = await sw4p.getSupportedPairs()
+const route = routes.find(
+  (candidate) =>
+    candidate.source === 'BASE' &&
+    candidate.destination === 'SOLANA' &&
+    candidate.asset === 'USDC'
+)
 
-// Get all pairs
-const pairs = await bridge.getSupportedPairs()
+if (!route || route.productionProofState !== 'ADMITTED') {
+  throw new Error('Requested route is not currently admitted')
+}
 ```
 
-## Transfer Limits
+The exact SDK response types remain owned by the generated API reference.
 
-| Limit | Amount |
-|-------|--------|
-| Minimum | $1.00 USDC |
-| Maximum | $100,000 USDC |
+## Limits
 
-## Coming Soon
+Minimums, maximums, daily limits, liquidity capacity, rate limits, and route availability are policy and environment values.
 
-<CardGroup cols={3}>
-  <Card title="More EVM Chains" icon="ethereum">
-    Optimism, Avalanche, BSC
-  </Card>
-  <Card title="More Tokens" icon="coins">
-    USDT, DAI, Native tokens
-  </Card>
-  <Card title="More Non-EVM" icon="globe">
-    Sui, Aptos, Cosmos
-  </Card>
-</CardGroup>
+They must be:
+
+- returned by the quote or discovery interface;
+- dated and versioned;
+- applied before authorization;
+- revalidated immediately before execution where required;
+- omitted from evergreen marketing copy.
+
+## Routes under development
+
+A planned or source-complete route may be listed in a research or development register only when its status is explicit.
+
+Do not present future chains or assets as “coming soon” without:
+
+- a defined customer or integration reason;
+- a named owner;
+- an accepted route architecture;
+- deployment and operating requirements;
+- funding for route-specific costs and capital;
+- a public activation decision.
+
+## Current source of truth
+
+Until the generated public route registry is connected, treat the current API discovery response and admitted settlement evidence as the operating authority.
+
+<Card title="Settlement lifecycle" icon="arrows-rotate" href="/">
+  Return to the SW4P introduction to see how route discovery fits into the complete settlement outcome.
+</Card>
