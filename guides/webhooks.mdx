@@ -1,63 +1,103 @@
 ---
-title: 'Webhooks'
-description: 'Receive status updates via webhooks'
+title: "Settlement Notifications"
+description: "Requirements for authenticated, replay-safe settlement status delivery."
 ---
 
-## Overview
+# Notifications report state; they do not define it
 
-Configure webhooks to receive real-time status updates for your transfers.
+A webhook, callback, stream, or polling response is a transport for settlement state.
 
-## Setup
+The authoritative state remains the admitted settlement record and its chain, provider, proof, recovery, and reconciliation evidence.
 
-Pass a `webhookUrl` when creating a transfer:
+A lost notification does not necessarily mean the settlement failed. A delivered notification does not by itself prove finality.
 
-```typescript
-const result = await bridge.transfer({
-  from: 'BASE',
-  to: 'SOLANA',
-  amount: '100.00',
-  recipient: '5abc123...',
-  permit: signedPermit,
-  webhookUrl: 'https://your-server.com/webhook/sw4p'
-})
+## Required notification properties
+
+A production notification contract should define:
+
+- event identifier;
+- settlement identifier;
+- event type and state version;
+- environment and route identifier;
+- event creation time;
+- current settlement state;
+- source and destination evidence references where available;
+- policy or schema version;
+- signature or message-authentication method;
+- retry and retention policy.
+
+## Delivery model
+
+```mermaid
+sequenceDiagram
+    participant S as SW4P settlement state
+    participant O as Outbox
+    participant D as Partner delivery endpoint
+    participant C as Partner client
+
+    S->>O: Persist state change and delivery record
+    O->>D: Deliver signed notification
+    D-->>O: Acknowledge accepted event
+    C->>S: Query authoritative state when needed
+    S-->>C: Return current admitted settlement state
 ```
 
-## Webhook Payload
+The settlement mutation and the outbox or delivery record should be committed atomically or through a design that cannot silently lose the notification obligation.
 
-```json
-{
-  "intent_id": "int_abc123",
-  "status": "complete",
-  "source_chain": "BASE",
-  "destination_chain": "SOLANA",
-  "source_tx": "0x...",
-  "destination_tx": "5a...",
-  "amount": "100.00",
-  "timestamp": "2024-01-01T00:01:05Z"
-}
-```
+## Receiver requirements
 
-## Status Events
+A receiver should:
 
-| Status | Description |
-|--------|-------------|
-| `detected` | Burn confirmed on source |
-| `minted` | Mint executed on destination |
-| `complete` | Transfer complete |
-| `failed` | Transfer failed |
+1. authenticate the notification using the current published scheme;
+2. reject unsupported schema or policy versions;
+3. deduplicate by event identifier;
+4. order or reconcile events by settlement and state version;
+5. acknowledge only after durable acceptance;
+6. query the authoritative state when delivery is delayed, duplicated, or out of order;
+7. preserve the final receipt and reconciliation reference.
 
-## Verification
+## Security requirements
 
-Verify webhook signatures using the `X-Sw4p-Signature` header.
+The admitted public contract must specify:
 
-```typescript
-import crypto from 'crypto'
+- key discovery and rotation;
+- signature algorithm and canonical payload encoding;
+- replay window or nonce treatment;
+- endpoint allowlisting or authentication where applicable;
+- secret and key storage requirements;
+- revocation and incident procedure;
+- test vectors.
 
-function verifyWebhook(payload: string, signature: string, secret: string) {
-  const expected = crypto
-    .createHmac('sha256', secret)
-    .update(payload)
-    .digest('hex')
-  return signature === expected
-}
-```
+<Warning>
+The previous page published a `webhookUrl` request field, an `X-Sw4p-Signature` header, and a simple HMAC example without an admitted implementation-derived contract. Those identifiers are not part of the current public API promise.
+</Warning>
+
+## Event taxonomy
+
+The final generated reference may expose events corresponding to states such as:
+
+- instruction accepted;
+- quote expired or replaced;
+- authorization accepted or rejected;
+- source execution submitted or finalized;
+- destination completion pending or finalized;
+- recovery required or completed;
+- refund completed;
+- reconciliation admitted or quarantined.
+
+The actual event names and payload fields belong to the generated developer contract.
+
+## Delivery failure
+
+SW4P and the partner must define:
+
+- retry schedule and maximum delivery horizon;
+- dead-letter or quarantine behavior;
+- partner re-delivery request;
+- state-query fallback;
+- operator escalation;
+- evidence retained after delivery expires.
+
+<Card title="Failure and recovery" icon="life-ring" href="/guides/error-handling">
+  Understand why notification loss and settlement failure are separate states.
+</Card>

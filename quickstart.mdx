@@ -1,129 +1,99 @@
 ---
-title: 'Quick Start'
-description: 'Make your first cross-chain transfer in 5 minutes'
+title: "Integration Readiness"
+description: "How to prepare one real SW4P settlement workflow for a design-partner integration."
 ---
 
-## Installation
+# Start with one settlement outcome
 
-<CodeGroup>
-```bash npm
-npm install @sw4p/sdk
+The current public entry is a **design-partner integration**, not a self-service SDK installation.
+
+Bring one real workflow that already needs value to move and close correctly. Examples include:
+
+- a marketplace payout;
+- a creator or media payment;
+- an embedded-wallet transfer;
+- an application fee or deposit;
+- a treasury instruction;
+- an agent or x402-compatible payment flow.
+
+## Define the outcome
+
+A useful integration brief answers:
+
+| Field | Required decision |
+|---|---|
+| **Payer and recipient** | Which actors are involved, and under whose authority? |
+| **Asset and amount** | Which settlement asset and amount semantics apply? |
+| **Source and destination** | Which exact rail and environment are required? |
+| **Fee policy** | Which protocol, provider, partner, or minimum fees may apply? |
+| **Gas policy** | Is gas sponsored, recovered, quoted separately, or user-paid? |
+| **Finality requirement** | Which state counts as accepted completion? |
+| **Failure policy** | Which retries, refunds, recovery, or escalation paths are allowed? |
+| **Evidence** | Which receipt and ledger record close the workflow? |
+| **Volume and limits** | What recurring volume, maximum, minimum, and capacity are required? |
+| **Production decision** | What must be proven before the integration is accepted? |
+
+## Integration sequence
+
+```mermaid
+flowchart LR
+    W[Real workflow] --> R[Route and policy review]
+    R --> C[Implementation contract]
+    C --> T[Test and failure corpus]
+    T --> P[Bounded pilot]
+    P --> E[Evidence and reconciliation]
+    E --> D[Production integration decision]
 ```
 
-```bash pnpm
-pnpm add @sw4p/sdk
-```
+### 1. Route and policy review
 
-```toml Rust
-[dependencies]
-sw4p-sdk = "0.1"
-```
-</CodeGroup>
+SW4P confirms whether an admitted route can support the asset, environment, amount, fee, gas, finality, and recovery requirements.
 
-## Get an API Key
+### 2. Implementation contract
 
-<Steps>
-  <Step title="Visit Developer Console">
-    Go to [console.sw4p.io](https://console.sw4p.io)
-  </Step>
-  <Step title="Connect Wallet">
-    Connect your EVM or Solana wallet to authenticate
-  </Step>
-  <Step title="Create API Key">
-    Open **API Keys** → Click **+ Create New Key** → Name your key
-  </Step>
-  <Step title="Copy Key">
-    Copy your `sk_555_live_...` key immediately (shown only once)
-  </Step>
-</Steps>
+The team freezes the exact request, response, authorization, idempotency, status, webhook, error, and evidence semantics for the pilot.
+
+### 3. Test and failure corpus
+
+The integration must prove both the successful path and the important failure states:
+
+- invalid or expired authorization;
+- insufficient balance or capacity;
+- duplicate submission;
+- route rejection;
+- source execution without destination completion;
+- timeout or stalled attestation;
+- recovery or refund;
+- reconciliation mismatch.
+
+### 4. Bounded pilot
+
+The pilot uses explicit limits, environment, counterparties, capital, and stop conditions.
+
+### 5. Evidence and production decision
+
+The pilot ends with a finished settlement record, not only a transaction hash. The partner and RNDRNTWRK decide whether to expand, revise, or stop the route.
+
+## Developer contract status
 
 <Warning>
-  Store your API key securely. It cannot be retrieved after you close the modal.
+The previous public docs contained unverified package names, API-key formats, endpoint paths, rate limits, and code examples. They have been removed from the current public navigation. Do not build against historical examples or copied snippets.
 </Warning>
 
-## Your First Transfer
+The authoritative developer contract will be generated from the accepted implementation and published only after:
 
-<CodeGroup>
-```typescript TypeScript
-import { Sw4p } from '@sw4p/sdk'
-
-const bridge = new Sw4p({ apiKey: 'sk_...' })
-
-// 1. Estimate fees
-const estimate = await bridge.estimateFee({
-  from: 'BASE',
-  to: 'SOLANA',
-  amount: '100.00'
-})
-console.log(`Fee: $${estimate.fee.total}`)
-console.log(`You receive: $${estimate.netReceive}`)
-
-// 2. Execute transfer
-const result = await bridge.transfer({
-  from: 'BASE',
-  to: 'SOLANA',
-  amount: '100.00',
-  recipient: '5abc123...', // Solana address
-  permit: signedPermit      // ERC-2612 permit
-})
-console.log(`Intent ID: ${result.intentId}`)
-
-// 3. Track status
-const status = await bridge.getStatus(result.intentId)
-console.log(`Status: ${status.status}`)
-```
-
-```rust Rust
-use sw4p_bridge::{Sw4p, Chain};
-
-#[tokio::main]
-async fn main() -> Result<(), sw4p_bridge::Error> {
-    let bridge = Sw4p::new("sk_...");
-
-    // 1. Estimate fees
-    let estimate = bridge.estimate_fee(
-        Chain::Base,
-        Chain::Solana,
-        "100.00"
-    ).await?;
-    println!("Fee: ${}", estimate.fee.total);
-
-    // 2. Execute transfer
-    let result = bridge.transfer(TransferParams {
-        from: Chain::Base,
-        to: Chain::Solana,
-        amount: "100.00".into(),
-        recipient: "5abc123...".into(),
-        permit: Some(permit),
-        ..Default::default()
-    }).await?;
-
-    println!("Intent ID: {}", result.intent_id);
-    Ok(())
-}
-```
-</CodeGroup>
-
-## Transfer Status
-
-Transfers progress through these phases:
-
-| Phase | Description |
-|-------|-------------|
-| `pending` | Transaction submitted, awaiting confirmation |
-| `detected` | Burn confirmed on source chain |
-| `attested` | Attestation received |
-| `minted` | Tokens minted on destination chain |
-| `complete` | Transfer fully complete |
-| `failed` | Transfer failed |
-
-## Next Steps
+1. interface and authentication review;
+2. route and environment admission;
+3. typed schema generation;
+4. failure and recovery verification;
+5. example compilation and execution;
+6. public versioning and deprecation policy.
 
 <CardGroup cols={2}>
-  <Card title="EVM → Solana" icon="arrow-right" href="/guides/evm-to-solana">
-    Transfer from any EVM chain to Solana
+  <Card title="Understand route state" icon="diagram-project" href="/supported-chains">
+    Review the fields and gates required by the public route registry.
   </Card>
-  <Card title="Solana → EVM" icon="arrow-left" href="/guides/solana-to-evm">
-    Transfer from Solana to any EVM chain
+  <Card title="Propose an integration" icon="handshake" href="https://www.rndrntwrk.com/partners">
+    Bring one live settlement workflow and the production decision it needs to reach.
   </Card>
 </CardGroup>
