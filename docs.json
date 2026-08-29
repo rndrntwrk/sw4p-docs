@@ -33,10 +33,25 @@
         { "anchor": "SW4P", "href": "https://sw4p.io/", "icon": "arrows-rotate" },
         { "anchor": "RNDRNTWRK", "href": "https://www.rndrntwrk.com/", "icon": "network-wired" },
         { "anchor": "Design partners", "href": "https://www.rndrntwrk.com/partners", "icon": "handshake" },
-        { "anchor": "Reports and disclosures", "href": "https://report.rndrntwrk.com/", "icon": "file-lines" }
+        { "anchor": "Transparency", "href": "https://www.rndrntwrk.com/transparency", "icon": "file-lines" }
       ]
     }
   },
+  "redirects": [
+    { "source": "/api-reference/introduction", "destination": "/quickstart" },
+    { "source": "/api-reference/endpoint/estimate", "destination": "/quickstart" },
+    { "source": "/api-reference/endpoint/transfer", "destination": "/quickstart" },
+    { "source": "/api-reference/endpoint/solana-build", "destination": "/quickstart" },
+    { "source": "/api-reference/endpoint/solana-submit", "destination": "/quickstart" },
+    { "source": "/api-reference/endpoint/status", "destination": "/guides/error-handling" },
+    { "source": "/api-reference/endpoint/pairs", "destination": "/supported-chains" },
+    { "source": "/api-reference/endpoint/limits", "destination": "/supported-chains" },
+    { "source": "/sdks/typescript", "destination": "/quickstart" },
+    { "source": "/sdks/rust", "destination": "/quickstart" },
+    { "source": "/guides/evm-to-evm", "destination": "/supported-chains" },
+    { "source": "/guides/evm-to-solana", "destination": "/supported-chains" },
+    { "source": "/guides/solana-to-evm", "destination": "/supported-chains" }
+  ],
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg",
@@ -57,6 +72,11 @@
     "socials": {
       "x": "https://x.com/RNDRNTWRK",
       "github": "https://github.com/rndrntwrk"
+    }
+  },
+  "seo": {
+    "metatags": {
+      "canonical": "https://docs.sw4p.io"
     }
   },
   "metadata": {
