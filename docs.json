@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "sw4p",
+  "name": "SW4P",
   "colors": {
     "primary": "#0078D7",
     "light": "#1E90FF",
@@ -123,8 +123,10 @@
   },
   "metadata": {
     "og:image": "/images/og-image.png",
-    "og:title": "sw4p - Gasless Cross-Chain Transfers",
-    "og:description": "Transfer stablecoins and native tokens across any blockchain",
+    "og:title": "SW4P | Intelligent value movement for the internet.",
+    "og:description": "SW4P is an intelligent routing and settlement system for moving value across the internet.",
+    "twitter:title": "SW4P | Intelligent value movement for the internet.",
+    "twitter:description": "SW4P is an intelligent routing and settlement system for moving value across the internet.",
     "twitter:card": "summary_large_image",
     "twitter:site": "@sw4p_io",
     "twitter:image": "/images/og-image.png"
