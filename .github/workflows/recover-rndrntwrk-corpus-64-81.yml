@@ -1,0 +1,102 @@
+name: Recover RNDRNTWRK corpus sections 64-81
+
+on:
+  push:
+    branches:
+      - tmp/corpus-source-recovery-20260914
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SHARE_URL: https://chatgpt.com/share/6aa7c400-fe54-83ea-95b6-d54af829b0a3
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Export public ChatGPT conversation and extract exact sections
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://github.com/MeghdadFadaee/chatgpt-share-exporter.git /tmp/chatgpt-share-exporter
+          python3 -m pip install --quiet requests
+          python3 /tmp/chatgpt-share-exporter/main.py "$SHARE_URL" --stdout > conversation_full.md
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, re
+
+          transcript = Path('conversation_full.md').read_text(encoding='utf-8')
+          message_re = re.compile(r'(?m)^##\s+\d+\.\s+(Assistant|User|System)(?:\s+-.*)?$')
+          section_re = re.compile(r'(?im)^#\s+section\s+(\d+)\s*:\s*(.+?)\s*$')
+          starts = list(message_re.finditer(transcript))
+          entries = []
+          for i, match in enumerate(starts):
+              end = starts[i + 1].start() if i + 1 < len(starts) else len(transcript)
+              block = transcript[match.start():end]
+              if match.group(1) != 'Assistant':
+                  continue
+              section = section_re.search(block)
+              if not section:
+                  continue
+              number = int(section.group(1))
+              body = block[section.start():].rstrip()
+              body = re.sub(r'\n\n---\s*$', '', body).rstrip() + '\n'
+              entries.append((number, section.group(2).strip(), body, i))
+
+          recovered = None
+          for index, entry in enumerate(entries):
+              candidate = entries[index:index + 18]
+              if entry[0] == 64 and [item[0] for item in candidate] == list(range(64, 82)):
+                  recovered = candidate
+                  break
+          if recovered is None:
+              raise SystemExit(f'Exact consecutive run 64-81 not found. Observed: {[item[0] for item in entries]}')
+
+          output = Path('recovered_source')
+          sections_dir = output / 'sections'
+          sections_dir.mkdir(parents=True, exist_ok=True)
+          manifest = []
+          combined = []
+          for number, title, body, message_index in recovered:
+              section_path = sections_dir / f'Section_{number:03d}.md'
+              section_path.write_text(body, encoding='utf-8')
+              combined.append(body.rstrip())
+              manifest.append({
+                  'section': number,
+                  'title': title,
+                  'message_block_index': message_index,
+                  'path': str(section_path.relative_to(output)),
+                  'chars': len(body),
+                  'words': len(body.split()),
+                  'sha256': hashlib.sha256(body.encode('utf-8')).hexdigest(),
+              })
+
+          combined_text = '\n\n---\n\n'.join(combined).rstrip() + '\n'
+          (output / 'RNDRNTWRK_Sections_64-81_Exact_Source.md').write_text(combined_text, encoding='utf-8')
+          (output / 'conversation_full.md').write_text(transcript, encoding='utf-8')
+          recovery_manifest = {
+              'source_url': 'https://chatgpt.com/share/6aa7c400-fe54-83ea-95b6-d54af829b0a3',
+              'method': 'public ChatGPT share export using MeghdadFadaee/chatgpt-share-exporter on GitHub Actions',
+              'transcript_chars': len(transcript),
+              'transcript_sha256': hashlib.sha256(transcript.encode('utf-8')).hexdigest(),
+              'combined_chars': len(combined_text),
+              'combined_sha256': hashlib.sha256(combined_text.encode('utf-8')).hexdigest(),
+              'sections': manifest,
+          }
+          (output / 'recovery_manifest.json').write_text(
+              json.dumps(recovery_manifest, indent=2, ensure_ascii=False) + '\n',
+              encoding='utf-8',
+          )
+          print(json.dumps(recovery_manifest, indent=2, ensure_ascii=False))
+          PY
+
+      - name: Upload exact recovered source
+        uses: actions/upload-artifact@v4
+        with:
+          name: corpus-sections-64-81-recovery
+          path: recovered_source/
+          if-no-files-found: error
+          retention-days: 7
